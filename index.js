@@ -11,7 +11,9 @@ app.listen(process.env.PORT, () => {
 
 // middleware body parsing
 const jsonParser = express.json();
-const urlEncodedParser = express.urlencoded();
+const urlEncodedParser = express.urlencoded({
+    extended : false
+});
 
 app.use(jsonParser);
 app.use(urlEncodedParser);
