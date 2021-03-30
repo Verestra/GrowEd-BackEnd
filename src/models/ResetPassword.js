@@ -2,8 +2,8 @@ let db = require("../database/dbMySql");
 
 let emailCheck = (email) => {
     return new Promise((resolve, reject) => {
-      let emailquery = "SELECT `email` FROM `users` WHERE `email` = ?";
-      db.query(emailquery, [email], function (err, result) {
+      let qsEmail = "SELECT `email` FROM `users` WHERE `email` = ?";
+      db.query(qsEmail, [email], function (err, result) {
         if (err) return reject(err);
         if (result.length === 0) {
           return resolve(false);

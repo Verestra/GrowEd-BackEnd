@@ -1,10 +1,8 @@
 const Router = require("express").Router();
-const Register = require("./register");
-const userLogin = require("./Login");
-const resetPassword = require("./resetPassword")
+const usersRouter = require("./users");
+const coursesRouter = require("./courses");
 
-Router.post("/api/auth/register", Register);
-Router.post("/api/auth/Login", userLogin);
-Router.post("/api/reset-password", resetPassword);
+Router.use("/courses", coursesRouter)
+Router.use("/users", usersRouter);
 
 module.exports = Router;

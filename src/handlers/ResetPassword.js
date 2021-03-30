@@ -1,7 +1,7 @@
 let { emailCheck, passwordChange } = require("../models/ResetPassword");
 let { sendResponse, sendError } = require("../helpers/Response");
 
-const passwordUpdate = async (req, res) => {
+const resetPassword = async (req, res) => {
   try {
     let { email, newPassword, passwordMatch } = req.body;
     let emailAvailable = await emailCheck(email);
@@ -21,5 +21,5 @@ const passwordUpdate = async (req, res) => {
   }
 }
 module.exports = {
-  passwordUpdate,
+  resetPassword,
 };
