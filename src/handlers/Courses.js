@@ -1,4 +1,4 @@
-const { getCoursesModel, searchCourseModel, sortCategoryModel, sortLevelModel, sortPriceModel } = require("../models/Courses")
+const { getCoursesModel, searchCourseModel, sortCategoryModel, sortLevelModel, sortPriceModel, addCourseModel} = require("../models/Courses")
 const { sendResponse, sendError } = require("../helpers/Response");
 
 const getAllCourses = async (req, res) => {
@@ -55,10 +55,21 @@ const sortCoursesByPrice = async (req, res) => {
     }
 };
 
+const addNewCourse = async (req, res) => {  
+    try {
+        let {className, categoryId, description, level_id, class_price, schedule, start_time, finish_time} = req.body
+        let addCourse = await addCourseModel(className, categoryId, description, level_id, class_price, schedule, start_time, finish_time)
+        return sendResponse(res, true, 200, ("Success Add Courses" + addCourse))
+    } catch(err){
+        return sendError(res, err)
+    }
+}
+
 module.exports = {
     getAllCourses,
     searchCoursesByName,
     sortCoursesByCategory,
     sortCoursesByLevel,
-    sortCoursesByPrice
+    sortCoursesByPrice,
+    addNewCourse
 }

@@ -69,10 +69,26 @@ let sortCategoryModel = (idCategory) => {
     });
   };
 
+  let addCourseModel = (className, categoryId, description, level_id, class_price, schedule, start_time, finish_time) => {
+    return new Promise((resolve, reject) => {
+      let addquery =
+        "INSERT INTO `courses` (`class_name`, `category_id`, `description`, `level_id`, `class_price`, `schedule`, `start_time`, `finish_time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+      db.query(
+        addquery,
+        [className, categoryId, description, level_id, class_price, schedule, start_time, finish_time],
+        function (err, result) {
+          if (err) return reject(err);
+          return resolve(result);
+        }
+      );
+    });
+  };
+
   module.exports = {
       getCoursesModel,
       searchCourseModel,
       sortCategoryModel,
       sortLevelModel,
-      sortPriceModel
+      sortPriceModel,
+      addCourseModel
   }

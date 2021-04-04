@@ -15,7 +15,7 @@ const userLogin = (req, res) => {
       if (result.length === 0) {
         return sendResponse(res, false, 400, "Data is not registered");
       } else {
-        res.send(result);
+        return sendResponse(res, true, 200, "Login Succes", result)
       }
     })
     .catch((err) => {

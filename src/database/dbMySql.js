@@ -1,5 +1,6 @@
 // init mysql
 const mysql = require('mysql');
+// const = process.env
 const config = {
     host: "localhost",
     user     : "root",

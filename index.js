@@ -3,6 +3,9 @@ require('dotenv').config()
 const express = require("express");
 const Router = require("./src/routers/router");
 
+
+
+
 const app = express();
 
 app.listen(process.env.PORT, () => {
@@ -18,4 +21,9 @@ const urlEncodedParser = express.urlencoded({
 app.use(jsonParser);
 app.use(urlEncodedParser);
 
+const cors = require('cors');
+
+app.use(cors());
+
 app.use(Router);
+
