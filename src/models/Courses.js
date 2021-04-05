@@ -13,6 +13,34 @@ const getCoursesModel = () => {
     });
 };
 
+let getMyClassModel = (studentId) => {
+  return new Promise((resolve, reject) => {
+    const qsMyClass =
+      "SELECT courses.* , courses_student.course FROM courses INNER JOIN courses_student ON courses.id_courses = courses_student.id WHERE courses_student.student = ?";
+    db.query(qsMyClass, [studentId], (err, result) => {
+      if (err) return reject(err);
+      if (result.length === 0) {
+        return reject(false);
+      }
+      return resolve(result);
+    });
+  });
+};
+
+let getStudentTotalScoreModel = (courseStudentId) => {
+  return new Promise((resolve, reject) => {
+    const qsMyClass =
+      "SELECT AVG(score) from student_progress WHERE course_student_id = ?";
+    db.query(qsMyClass, [courseStudentId], (err, result) => {
+      if (err) return reject(err);
+      if (result.length === 0) {
+        return reject(false);
+      }
+      return resolve(result);
+    });
+  });
+};
+
 let searchCourseModel = (searchValue) => {
     return new Promise((resolve, reject) => {
       const qsSearchCourse =
@@ -27,7 +55,21 @@ let searchCourseModel = (searchValue) => {
     });
   };
 
-let sortCategoryModel = (idCategory) => {
+  let sortCoursesCategoryModel = (sortValue) => {
+    return new Promise((resolve, reject) => {
+      const sortquery =
+        "SELECT * FROM `courses` ORDER BY ? ?";
+      db.query(sortquery, sortValue, (err, result) => {
+        if (err) return reject(err);
+        if (result.length === 0) {
+          return reject(false);
+        }
+        return resolve(result);
+      });
+    });
+  };
+
+let filterCategoryModel = (idCategory) => {
     return new Promise((resolve, reject) => {
       const qsCategory =
         "SELECT courses.* , courses_category.category_name FROM courses INNER JOIN courses_category ON courses.category_id = courses_category.category_id WHERE courses.category_id = ?";
@@ -41,7 +83,7 @@ let sortCategoryModel = (idCategory) => {
     });
   };
 
-  let sortLevelModel = (idLevel) => {
+  let filterLevelModel = (idLevel) => {
     return new Promise((resolve, reject) => {
       const qsLevel =
         "SELECT courses.* , courses_level.level_name FROM courses INNER JOIN courses_level ON courses.level_id = courses_level.level_id WHERE courses.level_id = ?";
@@ -71,10 +113,10 @@ let sortCategoryModel = (idCategory) => {
 
   let addCourseModel = (className, categoryId, description, level_id, class_price, schedule, start_time, finish_time) => {
     return new Promise((resolve, reject) => {
-      let addquery =
+      let qsAddCourse =
         "INSERT INTO `courses` (`class_name`, `category_id`, `description`, `level_id`, `class_price`, `schedule`, `start_time`, `finish_time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
       db.query(
-        addquery,
+        qsAddCourse,
         [className, categoryId, description, level_id, class_price, schedule, start_time, finish_time],
         function (err, result) {
           if (err) return reject(err);
@@ -84,11 +126,47 @@ let sortCategoryModel = (idCategory) => {
     });
   };
 
+  let addRegisterToCourseModel = (studentId, courseId) => {
+    return new Promise((resolve, reject) => {
+      let qsRegister =
+        "INSERT INTO `courses_student` (`student`, `course`) VALUES (?, ?)";
+      db.query(
+        qsRegister,
+        [studentId, courseId],
+        function (err, result) {
+          if (err) return reject(err);
+          return resolve(result);
+        }
+      );
+    });
+  };
+
+  let addStudentScoreModel = (courseStudentId, courseSubId, score) => {
+    return new Promise((resolve, reject) => {
+      let qsAddScore =
+        "INSERT INTO `student_progress` (`course_student_id`, `course_sub_id`, `score`) VALUES (?, ?, ?);";
+      db.query(
+        qsAddScore,
+        [courseStudentId, courseSubId, score],
+        function (err, result) {
+          if (err) return reject(err);
+          return resolve(result);
+        }
+      );
+    });
+  };
+
+
   module.exports = {
       getCoursesModel,
+      getMyClassModel,
+      getStudentTotalScoreModel,
       searchCourseModel,
-      sortCategoryModel,
-      sortLevelModel,
+      sortCoursesCategoryModel,
+      filterCategoryModel,
+      filterLevelModel,
       sortPriceModel,
-      addCourseModel
+      addCourseModel,
+      addRegisterToCourseModel,
+      addStudentScoreModel
   }
