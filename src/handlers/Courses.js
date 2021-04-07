@@ -9,6 +9,7 @@ const { getCoursesModel,
     addCourseModel,
     addRegisterToCourseModel,
     addStudentScoreModel } = require("../models/Courses")
+    
 const { sendResponse, sendError } = require("../helpers/Response");
 const mysql = require("mysql");
 
@@ -57,7 +58,8 @@ const searchCoursesByName = async (req, res) => {
 
 const sortCoursesCategory = async (req, res) => {
     try {
-        let sort1 = req.query;
+        let { sort1  } = req.query;
+        console.log("asd")
         console.log(sort1)
         let sortValue = sort1.split("-").map((q) => {
             switch (q) {

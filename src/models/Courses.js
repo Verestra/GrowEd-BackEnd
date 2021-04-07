@@ -60,6 +60,7 @@ let searchCourseModel = (searchValue) => {
       const sortquery =
         "SELECT * FROM `courses` ORDER BY ? ?";
       db.query(sortquery, sortValue, (err, result) => {
+        console.log(err) 
         if (err) return reject(err);
         if (result.length === 0) {
           return reject(false);
