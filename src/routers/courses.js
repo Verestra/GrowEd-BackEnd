@@ -1,4 +1,5 @@
 const Router = require("express").Router();
+const authorize = require("../middlewares/authorize");
 
 const { getAllCourses,
     getMyClass, 
@@ -16,7 +17,7 @@ const { getAllCourses,
 Router.get("/api/allClass", getAllCourses)
 
 // Get My Class by student_id
-Router.get("/api/myClass/:id", getMyClass)
+Router.get("/api/myClass/:id", authorize.memberOnly, getMyClass)
 
 // Get Total Student Score
 Router.get("/api/studentScore/:id", getStudentTotalScore)

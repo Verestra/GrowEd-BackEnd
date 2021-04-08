@@ -2,10 +2,10 @@
 const mysql = require('mysql');
 // const = process.env
 const config = {
-    host: "localhost",
-    user     : "root",
-    password : "",
-    database: "db_growed"
+    host: process.env.DB_HOST,
+    user     : process.env.DB_USER,
+    password : process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE
 };
 // init connection
 

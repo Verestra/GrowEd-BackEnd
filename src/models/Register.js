@@ -1,4 +1,5 @@
 const db = require("../database/dbMySql");
+const bcrypt = require('bcrypt');
 
 let usernameValidate = (username) => {
     return new Promise((resolve, reject) => {
@@ -30,14 +31,18 @@ let registerUser = (username, email, password) => {
     return new Promise((resolve, reject) => {
       const qsRegister =
         "INSERT INTO `users`(`username`, `email`, `password`, `role_id`) VALUES (?,?,?,'1')";
-      db.query(
-        qsRegister,
-        [username, email, password],
-        function (error, results) {
-          if (error) return reject(error);
-          return resolve(results);
-        }
-      );
+        bcrypt.hash(password, 10, (err, encryptPass) => {
+          if (err) return reject(err);
+          let encryptedPass = (password =encryptPass)
+          db.query(
+            qsRegister,
+            [username, email, encryptedPass],
+            function (error, results) {
+              if (error) return reject(error);
+              return resolve(results);
+            }
+          );
+        })
     });
   }
 
