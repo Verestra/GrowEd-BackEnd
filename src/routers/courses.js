@@ -1,7 +1,9 @@
 const Router = require("express").Router();
 const authorize = require("../middlewares/authorize");
 
-const { getAllCourses,
+const {
+    getAllCoursesPagination, 
+    getAllCourses,
     getMyClass, 
     getStudentTotalScore,
     searchCoursesByName,
@@ -12,6 +14,9 @@ const { getAllCourses,
     addNewCourse,
     addRegisterToCourse,
     addStudentScore } = require("../handlers/Courses");
+
+// Get All Courses Pagination
+Router.get("/api/all", getAllCoursesPagination)
 
 // Get All Courses
 Router.get("/api/allClass", getAllCourses)

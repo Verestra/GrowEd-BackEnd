@@ -1,9 +1,9 @@
 const db = require("../database/dbMySql");
 
-const getAllCoursesWithPagination = (query) => {
+const getAllCoursesPaginationModel = (query) => {
   return new Promise((resolve, reject) => {
     const qs =
-      'SELECT v.id, v.name, v.price, GROUP_CONCAT(c.category SEPARATOR ", ") AS "category" FROM videogames v JOIN videogame_category vc ON v.id = vc.game_id JOIN categories c ON vc.category_id = c.id GROUP BY v.id ORDER BY v.id';
+      'SELECT `id_courses`, `class_name`, `category_id`, `description`, `level_id`, `class_price`, `schedule`, `start_time`, `finish_time` FROM `courses`';
     const paginate = "LIMIT ? OFFSET ?";
     const qsWithPaginate = qs.concat(" ", paginate);
     // is query.limit truthy value?
@@ -198,7 +198,7 @@ let filterCategoryModel = (idCategory) => {
 
 
   module.exports = {
-      getAllCoursesWithPagination,
+      getAllCoursesPaginationModel,
       getCoursesModel,
       getMyClassModel,
       getStudentTotalScoreModel,

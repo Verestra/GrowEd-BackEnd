@@ -1,4 +1,5 @@
 const { getCoursesModel,
+    getAllCoursesPaginationModel,
     getMyClassModel,
     getStudentTotalScoreModel,
     searchCourseModel,
@@ -10,8 +11,41 @@ const { getCoursesModel,
     addRegisterToCourseModel,
     addStudentScoreModel } = require("../models/Courses")
     
-const { sendResponse, sendError } = require("../helpers/Response");
+const { sendResponse, sendError, writeError, writeResponsePaginated } = require("../helpers/Response");
 const mysql = require("mysql");
+
+const getAllCoursesPagination = (req, res) => {
+    const { query, baseUrl, path, hostname, protocol } = req;
+    getAllCoursesPaginationModel(query)
+      .then((finalResult) => {
+        const { result, count, page, limit } = finalResult;
+        const totalPage = Math.ceil(count / limit);
+        // count limit total
+        // 8      3     3
+        // 10     4     3
+        const url =
+          protocol + "://" + hostname + ":" + process.env.PORT + baseUrl + path;
+        const prev =
+          page === 1 ? null : url + `?page=${page - 1}&limit=${query.limit || 3}`;
+        const next =
+          page === totalPage
+            ? null
+            : url + `?page=${page + 1}&limit=${query.limit || 3}`;
+        const info = {
+          count,
+          page,
+          totalPage,
+          next,
+          prev,
+        };
+        writeResponsePaginated(res, 200, result, info);
+      })
+      .catch((err) => {
+        console.log(err);
+        writeError(res, 500, err);
+      });
+  };
+
 
 const getAllCourses = async (req, res) => {
     try {
@@ -142,6 +176,7 @@ const addStudentScore = async (req, res) => {
 }
 
 module.exports = {
+    getAllCoursesPagination,
     getAllCourses,
     getMyClass,
     getStudentTotalScore,
