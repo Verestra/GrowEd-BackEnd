@@ -17,7 +17,7 @@ const { getAllCourses,
 Router.get("/api/allClass", getAllCourses)
 
 // Get My Class by student_id
-Router.get("/api/myClass/:id", authorize.memberOnly, getMyClass)
+Router.get("/api/myClass/:id", authorize.studentOnly, getMyClass)
 
 // Get Total Student Score
 Router.get("/api/studentScore/:id", getStudentTotalScore)
@@ -38,7 +38,7 @@ Router.get("/api/level/:id", filterLevel)
 Router.get("/api/price/:price", sortCoursesByPrice)
 
 // POST New Courses
-Router.post("/api/addClass", addNewCourse)
+Router.post("/api/addClass", authorize.fasilitatorOnly, addNewCourse)
 
 // POST Register Student To Course
 Router.post("/api/registerClass", addRegisterToCourse)
