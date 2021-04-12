@@ -1,5 +1,6 @@
 const Router = require("express").Router();
 const authorize = require("../middlewares/authorize");
+const multerUploadImage = require("../middlewares/uploadImage")
 
 const {
     getAllCoursesPagination, 
@@ -50,5 +51,14 @@ Router.post("/api/registerClass", addRegisterToCourse)
 
 // POST Student Score
 Router.post("/api/addScore", addStudentScore)
+
+Router.post("/api/upload", multerUploadImage.single("image"), (req, res) => {
+    const { file } = req;
+    const url = `/images/${file.filename}`;
+    res.status(200).json({
+      msg: "Upload Success",
+      url,
+    });
+  });
 
 module.exports = Router;
