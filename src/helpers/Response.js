@@ -16,12 +16,14 @@ const writeError = (res, status, err) => {
   res.status(status).json(new Error(err));
 };
 
-const writeResponsePaginated = (res, status, result, info) => {
-  let response = {};
+const writeResponsePaginated = (res, status, result, info, message) => {
+  let response = {
+  };
   if (result) {
     response = {
       ...response,
       success: true,
+      message,
       result,
     };
   }

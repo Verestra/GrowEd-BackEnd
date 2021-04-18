@@ -1,4 +1,6 @@
 let db = require("../database/dbMySql");
+const bcrypt = require('bcrypt');
+
 
 let emailCheck = (email) => {
     return new Promise((resolve, reject) => {
@@ -15,11 +17,19 @@ let emailCheck = (email) => {
 
 let passwordChange = (newPassword, email) => {
   return new Promise((resolve, reject) => {
-    const qs = "UPDATE `users` SET `password`= ? WHERE `email` = ?";
-    db.query(qs, [newPassword, email], function (err, result) {
+    const qsChange = "UPDATE `users` SET `password`= ? WHERE `email` = ?";
+    bcrypt.hash(newPassword, 10, (err, encryptPass) => {
       if (err) return reject(err);
-      return resolve(result);
-    });
+      let encryptedPass = (newPassword = encryptPass)
+      db.query(
+        qsChange,
+        [encryptedPass, email],
+        function (error, results) {
+          if (error) return reject(error);
+          return resolve(results);
+        }
+      );
+    })
   });
 };
 

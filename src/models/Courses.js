@@ -1,27 +1,75 @@
 const db = require("../database/dbMySql");
+const mysql = require("mysql");
 
 const getAllCoursesPaginationModel = (query) => {
   return new Promise((resolve, reject) => {
     const qs =
-      'SELECT `id_courses`, `class_name`, `category_id`, `description`, `level_id`, `class_price`, `schedule`, `start_time`, `finish_time` FROM `courses`';
+      'SELECT c.id_courses, c.class_name, ct.category_name, c.description, cl.level_name, c.class_price, c.schedule,  c.finish_time, c.image FROM courses c JOIN courses_category ct ON c.category_id = ct.category_id JOIN courses_level cl ON c.level_id = cl.level_id';
+    const searchValue =  "WHERE class_name LIKE ?"
+    let sortBy = "ORDER BY ?"
     const paginate = "LIMIT ? OFFSET ?";
-    const qsWithPaginate = qs.concat(" ", paginate);
-    // is query.limit truthy value?
-    // number 0 => falsy value
-    // null | undefined | 0 | "" | false
+    const qsWithPaginate = qs.concat(" ", searchValue, " ", sortBy, " ", paginate);
+    const sortValue = query.sort || null;
+
+    if (sortValue) {
+      switch (sortValue.toLowerCase()) {
+        case "category":
+          sortBy = mysql.raw("category_id");
+          break;
+        case "level":
+          sortBy = mysql.raw("level_id");
+          break;
+        case "price":
+          sortBy = mysql.raw("class_price");
+          break;
+        default:
+          sortBy = null;
+          break;
+      }
+    }
+    console.log(sortValue)
+    const searchValues = "%" + (query.search) + "%" || "%%";
     const limit = Number(query.limit) || 3;
-    // const limit = query.limit ?? 3
-    // nullish coalescence
-    // null | undefined
+    
     const page = Number(query.page) || 1;
     const offset = (page - 1) * limit;
     // console.log(limit, page, offset);
-    db.query(qsWithPaginate, [limit, offset], (err, result) => {
+    db.query(qsWithPaginate, [searchValues, sortBy, limit, offset], (err, result) => {
       if (err) return reject(err);
 
       const qsCount = 'SELECT COUNT(*) AS "count" FROM courses';
-      // escaped character (\) => sehingga tanda yang digunakan sebagai syntax muncul sebagai string
       db.query(qsCount, (err, data) => {
+        if (err) return reject(err);
+        const { count } = data[0];
+        let finalResult = {
+          result,
+          count,
+          page,
+          limit,
+        };
+        resolve(finalResult);
+      });
+      // count page next prev
+    });
+  });
+};
+
+let getMyClassModel = (studentId, query) => {
+  return new Promise((resolve, reject) => {
+    const qsMyClass =
+      "SELECT c.id_courses, cs.student, c.class_name, ct.category_name, c.description, cl.level_name, c.class_price, c.schedule,  c.finish_time, c.image FROM courses c JOIN courses_category ct ON c.category_id = ct.category_id JOIN courses_level cl ON c.level_id = cl.level_id JOIN courses_student cs ON c.id_courses = cs.course WHERE cs.student = ? ORDER BY c.id_courses";
+    const paginate = "LIMIT ? OFFSET ?";
+    const qsWithPaginate = qsMyClass.concat(" ", paginate);
+    const limit = Number(query.limit) || 3;
+    const page = Number(query.page) || 1;
+    const offset = (page - 1) * limit;
+    // console.log(limit, page, offset);
+    db.query(qsWithPaginate, [studentId ,limit, offset], (err, result) => {
+      if (err) return reject(err);
+
+      const qsCount = 'SELECT COUNT(*) AS "count" FROM courses_student WHERE student = ?';
+      // escaped character (\) => sehingga tanda yang digunakan sebagai syntax muncul sebagai string
+      db.query(qsCount,[studentId], (err, data) => {
         if (err) return reject(err);
 
         const { count } = data[0];
@@ -38,38 +86,10 @@ const getAllCoursesPaginationModel = (query) => {
   });
 };
 
-
-const getCoursesModel = () => {
-    return new Promise((resolve, reject) => {
-        const qsGetCourses = "SELECT * FROM `courses`";
-        db.query(qsGetCourses, (err, result) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(result);
-            }
-        });
-    });
-};
-
-let getMyClassModel = (studentId) => {
-  return new Promise((resolve, reject) => {
-    const qsMyClass =
-      "SELECT courses.* , courses_student.course FROM courses INNER JOIN courses_student ON courses.id_courses = courses_student.id WHERE courses_student.student = ?";
-    db.query(qsMyClass, [studentId], (err, result) => {
-      if (err) return reject(err);
-      if (result.length === 0) {
-        return reject(false);
-      }
-      return resolve(result);
-    });
-  });
-};
-
 let getStudentTotalScoreModel = (courseStudentId) => {
   return new Promise((resolve, reject) => {
     const qsMyClass =
-      "SELECT AVG(score) from student_progress WHERE course_student_id = ?";
+      "SELECT AVG(score) from student_progress WHERE student_id = ?";
     db.query(qsMyClass, [courseStudentId], (err, result) => {
       if (err) return reject(err);
       if (result.length === 0) {
@@ -80,34 +100,7 @@ let getStudentTotalScoreModel = (courseStudentId) => {
   });
 };
 
-let searchCourseModel = (searchValue) => {
-    return new Promise((resolve, reject) => {
-      const qsSearchCourse =
-        "SELECT `id_courses`, `class_name`, `category_id`, `description`, `level_id`, `class_price`, `schedule`, `start_time`, `finish_time` FROM `courses` WHERE class_name LIKE ?";
-      db.query(qsSearchCourse, [searchValue], (err, result) => {
-        if (err) return reject(err);
-        if (result.length === 0) {
-          return reject(false);
-        }
-        return resolve(result);
-      });
-    });
-  };
 
-  let sortCoursesCategoryModel = (sortValue) => {
-    return new Promise((resolve, reject) => {
-      const sortquery =
-        "SELECT * FROM `courses` ORDER BY ? ?";
-      db.query(sortquery, sortValue, (err, result) => {
-        console.log(err) 
-        if (err) return reject(err);
-        if (result.length === 0) {
-          return reject(false);
-        }
-        return resolve(result);
-      });
-    });
-  };
 
 let filterCategoryModel = (idCategory) => {
     return new Promise((resolve, reject) => {
@@ -137,32 +130,51 @@ let filterCategoryModel = (idCategory) => {
     });
   };
 
-  let sortPriceModel = (searchPrice) => {
-    return new Promise((resolve, reject) => {
-      const qsPrice =
-        "SELECT id_courses, class_name, category_id, description, level_id, class_price, schedule, start_time, finish_time FROM courses ORDER BY courses.class_price ?";
-      db.query(qsPrice, [searchPrice], (err, result) => {
-        if (err) return reject(err);
-        if (result.length === 0) {
-          return reject(false);
-        }
-        return resolve(result);
-      });
-    });
-  };
 
-  let addCourseModel = (className, categoryId, description, level_id, class_price, schedule, start_time, finish_time) => {
+  let addCourseModel = (id_user, className, categoryId, description, level_id, class_price, schedule, start_time, finish_time, image) => {
     return new Promise((resolve, reject) => {
       let qsAddCourse =
-        "INSERT INTO `courses` (`class_name`, `category_id`, `description`, `level_id`, `class_price`, `schedule`, `start_time`, `finish_time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        "INSERT INTO `courses` (`id_fasilitator`, `class_name`, `category_id`, `description`, `level_id`, `class_price`, `schedule`, `start_time`, `finish_time`, `image`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
       db.query(
         qsAddCourse,
-        [className, categoryId, description, level_id, class_price, schedule, start_time, finish_time],
+        [id_user, className, categoryId, description, level_id, class_price, schedule, start_time, finish_time, image],
         function (err, result) {
           if (err) return reject(err);
           return resolve(result);
         }
       );
+    });
+  };
+
+  let getMyClassFasilitatorModel = (id_user, query) => {
+    return new Promise((resolve, reject) => {
+      const qsMyClass =
+        "select  c.id_courses, c.class_name, ct.category_name, c.description , cl.level_name, c.class_price, c.schedule, c.start_time, c.finish_time, c.image,  (SELECT COUNT(*)   FROM courses_student WHERE course = c.id_courses) AS student_count FROM courses c JOIN courses_category ct ON c.category_id = ct.category_id JOIN courses_level cl ON c.level_id = cl.level_id where id_fasilitator = ? ORDER BY c.id_courses";
+        const paginate = "LIMIT ? OFFSET ?";
+        const qsWithPaginate = qsMyClass.concat(" ", paginate);
+        const limit = Number(query.limit) || 3;
+        const page = Number(query.page) || 1;
+        const offset = (page - 1) * limit;
+        // console.log(limit, page, offset);
+        db.query(qsWithPaginate, [id_user ,limit, offset], (err, result) => {
+          if (err) return reject(err);
+    
+          const qsCount = 'SELECT COUNT(*) AS "count" FROM courses WHERE id_fasilitator = ?';
+          // escaped character (\) => sehingga tanda yang digunakan sebagai syntax muncul sebagai string
+          db.query(qsCount, [id_user], (err, data) => {
+            if (err) return reject(err);
+    
+            const { count } = data[0];
+            let finalResult = {
+              result,
+              count,
+              page,
+              limit,
+            };
+            resolve(finalResult);
+          });
+          // count page next prev
+        });
     });
   };
 
@@ -199,14 +211,11 @@ let filterCategoryModel = (idCategory) => {
 
   module.exports = {
       getAllCoursesPaginationModel,
-      getCoursesModel,
       getMyClassModel,
+      getMyClassFasilitatorModel,
       getStudentTotalScoreModel,
-      searchCourseModel,
-      sortCoursesCategoryModel,
       filterCategoryModel,
       filterLevelModel,
-      sortPriceModel,
       addCourseModel,
       addRegisterToCourseModel,
       addStudentScoreModel

@@ -1,114 +1,148 @@
-const { getCoursesModel,
-    getAllCoursesPaginationModel,
+const {getAllCoursesPaginationModel,
     getMyClassModel,
+    getMyClassFasilitatorModel,
     getStudentTotalScoreModel,
-    searchCourseModel,
-    sortCoursesCategoryModel,
     filterCategoryModel,
     filterLevelModel,
-    sortPriceModel,
     addCourseModel,
     addRegisterToCourseModel,
-    addStudentScoreModel } = require("../models/Courses")
-    
+    addStudentScoreModel } = require("../models/Courses");
+
 const { sendResponse, sendError, writeError, writeResponsePaginated } = require("../helpers/Response");
-const mysql = require("mysql");
 
 const getAllCoursesPagination = (req, res) => {
     const { query, baseUrl, path, hostname, protocol } = req;
+    
     getAllCoursesPaginationModel(query)
-      .then((finalResult) => {
-        const { result, count, page, limit } = finalResult;
-        const totalPage = Math.ceil(count / limit);
-        // count limit total
-        // 8      3     3
-        // 10     4     3
-        const url =
-          protocol + "://" + hostname + ":" + process.env.PORT + baseUrl + path;
-        const prev =
-          page === 1 ? null : url + `?page=${page - 1}&limit=${query.limit || 3}`;
-        const next =
-          page === totalPage
-            ? null
-            : url + `?page=${page + 1}&limit=${query.limit || 3}`;
-        const info = {
-          count,
-          page,
-          totalPage,
-          next,
-          prev,
-        };
-        writeResponsePaginated(res, 200, result, info);
-      })
-      .catch((err) => {
-        console.log(err);
-        writeError(res, 500, err);
-      });
-  };
-
-
-const getAllCourses = async (req, res) => {
-    try {
-        const getAll = await getCoursesModel();
-        return sendResponse(res, true, 200, getAll)
-    } catch (err) {
-        return sendError(res, err)
-    }
-}
-
-const getMyClass = async (req, res) => {
-    try {
-        const studentId = req.params.id;
-        const myClass = await getMyClassModel(studentId);
-        return sendResponse(res, true, 200, "My Class", myClass);
-    } catch (err) {
-        return sendError(res, err);
-    }
+        .then((finalResult) => {
+            const { result, count, page, limit } = finalResult;
+            const totalPage = Math.ceil(count / limit);
+            // count limit total
+            // 8      3     3
+            // 10     4     3
+            const url =
+                protocol + "://" + hostname + ":" + process.env.PORT + baseUrl + path;
+            const prev =
+                page === 1 ? null : url + `?page=${page - 1}&limit=${query.limit || 3}`;
+            const next =
+                page === totalPage
+                    ? null
+                    : url + `?page=${page + 1}&limit=${query.limit || 3}`;
+            const info = {
+                count,
+                page,
+                totalPage,
+                next,
+                prev,
+            };
+            writeResponsePaginated(res, 200, result, info);
+        })
+        .catch((err) => {
+            console.log(err);
+            writeError(res, 500, err);
+        });
 };
+
+
+const getMyClassPagination = (req, res) => {
+    const { query, baseUrl, path, hostname, protocol } = req;
+    const { id_user } = req.res.locals.userdata
+    const studentId = id_user;
+    
+    getMyClassModel(studentId ,query)
+        .then((finalResult) => {
+            const { result, count, page, limit } = finalResult;
+            const totalPage = Math.ceil(count / limit);
+            // count limit total
+            // 8      3     3
+            // 10     4     3
+            const url =
+                protocol + "://" + hostname + ":" + process.env.PORT + baseUrl + path;
+            const prev =
+                page === 1 ? null : url + `?page=${page - 1}&limit=${query.limit || 3}`;
+            const next =
+                page === totalPage
+                    ? null
+                    : url + `?page=${page + 1}&limit=${query.limit || 3}`;
+            const info = {
+                count,
+                page,
+                totalPage,
+                next,
+                prev,
+            };
+            writeResponsePaginated(res, 200, result, info, req.res.locals.userdata);
+        })
+        .catch((err) => {
+            console.log(err);
+            writeError(res, 500, err);
+        });
+};
+
+// const getMyClass = async (req, res) => {
+//     try {
+//         const { id_user } = req.res.locals.userdata
+//         console.log(id_user)
+//         const studentId = id_user;
+//         const myClass = await getMyClassModel(studentId);
+//         return sendResponse(res, true, 200, req.res.locals.userdata, myClass, );
+//     } catch (err) {
+//         return sendError(res, err);
+//     }
+// };
+
+const getMyClassFasilitatorPagination = (req, res) => {
+    const { query, baseUrl, path, hostname, protocol } = req;
+    const { id_user } = req.res.locals.userdata
+    
+    getMyClassFasilitatorModel(id_user ,query)
+        .then((finalResult) => {
+            const { result, count, page, limit, counting } = finalResult;
+            const totalPage = Math.ceil(count / limit);
+            // count limit total
+            // 8      3     3
+            // 10     4     3
+            const url =
+                protocol + "://" + hostname + ":" + process.env.PORT + baseUrl + path;
+            const prev =
+                page === 1 ? null : url + `?page=${page - 1}&limit=${query.limit || 3}`;
+            const next =
+                page === totalPage
+                    ? null
+                    : url + `?page=${page + 1}&limit=${query.limit || 3}`;
+            const info = {
+                count,
+                page,
+                totalPage,
+                next,
+                prev,
+                counting
+            };
+            
+            writeResponsePaginated(res, 200, result, info, req.res.locals.userdata);
+        })
+        .catch((err) => {
+            console.log(err);
+            writeError(res, 500, err);
+        });
+};
+
+// const getMyClassFasilitator = async (req, res) => {
+//     try {
+//         const { id_user } = req.res.locals.userdata
+//         console.log(id_user)
+//         const myClass = await getMyClassFasilitatorModel(id_user);
+//         return sendResponse(res, true, 200, req.res.locals.userdata, myClass, );
+//     } catch (err) {
+//         return sendError(res, err);
+//     }
+// };
 
 const getStudentTotalScore = async (req, res) => {
     try {
-        const courseStudentId = req.params.id;
-        const totalScore = await getStudentTotalScoreModel(courseStudentId);
+        const {id_user} = req.res.locals.userdata;
+        const totalScore = await getStudentTotalScoreModel(id_user);
         return sendResponse(res, true, 200, "Total score", totalScore);
-    } catch (err) {
-        return sendError(res, err);
-    }
-};
-
-const searchCoursesByName = async (req, res) => {
-    try {
-        const { search } = req.query;
-        const searchValue = "%" + search + "%";
-        if (!search) {
-            return sendResponse(res, false, 400, "Search Can't be empty");
-        }
-        const searchCourse = await searchCourseModel(searchValue);
-        return sendResponse(res, true, 200, "All Courses", searchCourse);
-    } catch (err) {
-        return sendError(res, err);
-    }
-};
-
-const sortCoursesCategory = async (req, res) => {
-    try {
-        let { sort1  } = req.query;
-        console.log("asd")
-        console.log(sort1)
-        let sortValue = sort1.split("-").map((q) => {
-            switch (q) {
-                case "AZ":
-                    return mysql.raw("ASC");
-                case "ZA":
-                    return mysql.raw("DESC");
-                default:
-                    return mysql.raw(q);
-            }
-        });
-        console.log(sortValue);
-        let SortCourse = await sortCoursesCategoryModel(sortValue);
-        console.log(SortCourse);
-        return sendResponse(res, true, 200, "Succes", SortCourse);
     } catch (err) {
         return sendError(res, err);
     }
@@ -134,23 +168,36 @@ const filterLevel = async (req, res) => {
     }
 };
 
-const sortCoursesByPrice = async (req, res) => {
-    try {
-        const searchPrice = req.params.price;
-        console.log(searchPrice)
-        const sortCourse = await sortPriceModel(searchPrice);
-        return sendResponse(res, true, 200, "All Courses sort Price", sortCourse);
-    } catch (err) {
-        return sendError(res, err);
-    }
-};
-
 const addNewCourse = async (req, res) => {
     try {
-        let { className, categoryId, description, level_id, class_price, schedule, start_time, finish_time } = req.body
-        let addCourse = await addCourseModel(className, categoryId, description, level_id, class_price, schedule, start_time, finish_time)
-        return sendResponse(res, true, 200, ("Success Add Courses" + addCourse))
+        const {files} = req
+        if (files) {
+            const newPathFile = files[0].filename;
+            console.log(newPathFile)
+            req.body.image = newPathFile;
+          }
+        let {id_user} = req.res.locals.userdata
+        let { className, 
+            categoryId, 
+            description, 
+            level_id, 
+            class_price, 
+            schedule, 
+            start_time, 
+            finish_time, 
+            image} = req.body
+        await addCourseModel(id_user, className, 
+            categoryId, 
+            description, 
+            level_id, 
+            class_price, 
+            schedule, 
+            start_time, 
+            finish_time, 
+            image)
+        return sendResponse(res, true, 200, ("Success Add Courses"))
     } catch (err) {
+        console.log(err)
         return sendError(res, err)
     }
 }
@@ -167,9 +214,9 @@ const addRegisterToCourse = async (req, res) => {
 
 const addStudentScore = async (req, res) => {
     try {
-        let { courseStudentId, courseSubId, score } = req.body
-        let addScore = await addStudentScoreModel(courseStudentId, courseSubId, score)
-        return sendResponse(res, true, 200, ("Success Score Added" + addScore))
+        let { student_id , course_sub_id, score } = req.body
+        await addStudentScoreModel(student_id , course_sub_id, score)
+        return sendResponse(res, true, 200, ("Success Score Added"))
     } catch (err) {
         return sendError(res, err)
     }
@@ -177,14 +224,13 @@ const addStudentScore = async (req, res) => {
 
 module.exports = {
     getAllCoursesPagination,
-    getAllCourses,
-    getMyClass,
+    getMyClassPagination,
+    getMyClassFasilitatorPagination,
+    // getMyClass,
+    // getMyClassFasilitator,
     getStudentTotalScore,
-    searchCoursesByName,
-    sortCoursesCategory,
     filterCategory,
     filterLevel,
-    sortCoursesByPrice,
     addNewCourse,
     addRegisterToCourse,
     addStudentScore

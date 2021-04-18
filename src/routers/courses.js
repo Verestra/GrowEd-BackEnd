@@ -4,14 +4,11 @@ const multerUploadImage = require("../middlewares/uploadImage")
 
 const {
     getAllCoursesPagination, 
-    getAllCourses,
-    getMyClass, 
-    getStudentTotalScore,
-    searchCoursesByName,
-    sortCoursesCategory, 
+    getMyClassPagination,
+    getMyClassFasilitatorPagination, 
+    getStudentTotalScore, 
     filterCategory, 
     filterLevel, 
-    sortCoursesByPrice, 
     addNewCourse,
     addRegisterToCourse,
     addStudentScore } = require("../handlers/Courses");
@@ -19,20 +16,14 @@ const {
 // Get All Courses Pagination
 Router.get("/api/all", getAllCoursesPagination)
 
-// Get All Courses
-Router.get("/api/allClass", getAllCourses)
+// Get My Class Paginated by student_id
+Router.get("/api/myClass/", authorize.studentOnly, getMyClassPagination)
 
-// Get My Class by student_id
-Router.get("/api/myClass/:id", authorize.studentOnly, getMyClass)
+// Get My Class Paginated by id_fasilitator
+Router.get("/api/myClassFasilitator/", authorize.fasilitatorOnly, getMyClassFasilitatorPagination)
 
 // Get Total Student Score
-Router.get("/api/studentScore/:id", getStudentTotalScore)
-
-// Get Search query params
-Router.get("/api/", searchCoursesByName)
-
-// Get Sort Courses
-Router.get("/api/category/sort/", sortCoursesCategory)
+Router.get("/api/studentScore/", authorize.studentOnly, getStudentTotalScore)
 
 // Get Filter Category by ID
 Router.get("/api/category/:id", filterCategory)
@@ -40,11 +31,9 @@ Router.get("/api/category/:id", filterCategory)
 // Get Filter Level by ID
 Router.get("/api/level/:id", filterLevel)
 
-// Get Price sort
-Router.get("/api/price/:price", sortCoursesByPrice)
 
 // POST New Courses
-Router.post("/api/addClass", authorize.fasilitatorOnly, addNewCourse)
+Router.post("/api/addClass", authorize.fasilitatorOnly, multerUploadImage.any("image"), addNewCourse)
 
 // POST Register Student To Course
 Router.post("/api/registerClass", addRegisterToCourse)
