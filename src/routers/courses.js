@@ -7,6 +7,7 @@ const {
     getMyClassPagination,
     getMyClassFasilitatorPagination, 
     getStudentTotalScore, 
+    getStudentClassProgress,
     filterCategory, 
     filterLevel, 
     addNewCourse,
@@ -24,6 +25,9 @@ Router.get("/api/myClassFasilitator/", authorize.fasilitatorOnly, getMyClassFasi
 
 // Get Total Student Score
 Router.get("/api/studentScore/", authorize.studentOnly, getStudentTotalScore)
+
+// Get Student Class Progress
+Router.get("/api/studentprogress/", authorize.studentOnly, getStudentClassProgress)
 
 // Get Filter Category by ID
 Router.get("/api/category/:id", filterCategory)

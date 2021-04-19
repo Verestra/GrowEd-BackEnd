@@ -2,6 +2,7 @@ const {getAllCoursesPaginationModel,
     getMyClassModel,
     getMyClassFasilitatorModel,
     getStudentTotalScoreModel,
+    getStudentClassProgressModel,
     filterCategoryModel,
     filterLevelModel,
     addCourseModel,
@@ -99,9 +100,6 @@ const getMyClassFasilitatorPagination = (req, res) => {
         .then((finalResult) => {
             const { result, count, page, limit, counting } = finalResult;
             const totalPage = Math.ceil(count / limit);
-            // count limit total
-            // 8      3     3
-            // 10     4     3
             const url =
                 protocol + "://" + hostname + ":" + process.env.PORT + baseUrl + path;
             const prev =
@@ -143,6 +141,16 @@ const getStudentTotalScore = async (req, res) => {
         const {id_user} = req.res.locals.userdata;
         const totalScore = await getStudentTotalScoreModel(id_user);
         return sendResponse(res, true, 200, "Total score", totalScore);
+    } catch (err) {
+        return sendError(res, err);
+    }
+};
+
+const getStudentClassProgress = async (req, res) => {
+    try {
+        const {id_user} = req.res.locals.userdata;
+        const classProgress = await getStudentClassProgressModel(id_user);
+        return sendResponse(res, true, 200, "Student Progress", classProgress);
     } catch (err) {
         return sendError(res, err);
     }
@@ -229,6 +237,7 @@ module.exports = {
     // getMyClass,
     // getMyClassFasilitator,
     getStudentTotalScore,
+    getStudentClassProgress,
     filterCategory,
     filterLevel,
     addNewCourse,

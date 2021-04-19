@@ -14,13 +14,13 @@ const getAllCoursesPaginationModel = (query) => {
     if (sortValue) {
       switch (sortValue.toLowerCase()) {
         case "category":
-          sortBy = mysql.raw("category_id");
+          sortBy = mysql.raw("c.category_id");
           break;
         case "level":
-          sortBy = mysql.raw("level_id");
+          sortBy = mysql.raw("c.level_id");
           break;
         case "price":
-          sortBy = mysql.raw("class_price");
+          sortBy = mysql.raw("c.class_price");
           break;
         default:
           sortBy = null;
@@ -99,6 +99,21 @@ let getStudentTotalScoreModel = (courseStudentId) => {
     });
   });
 };
+
+let getStudentClassProgressModel = (student_id) => {
+  return new Promise((resolve, reject) => {
+    const qsMyClass =
+      "SELECT cs.name, sp.score, CONCAT(c.schedule, ' ', c.start_time,' ', c.finish_time) AS 'Date' FROM `courses_sub` cs JOIN student_progress sp ON cs.id  = sp.courses_sub_id JOIN courses c ON c.id_courses = cs.courses_id WHERE sp.student_id = ?";
+    db.query(qsMyClass, [student_id], (err, result) => {
+      if (err) return reject(err);
+      if (result.length === 0) {
+        return reject(false);
+      }
+      return resolve(result);
+    });
+  });
+};
+
 
 
 
@@ -214,6 +229,7 @@ let filterCategoryModel = (idCategory) => {
       getMyClassModel,
       getMyClassFasilitatorModel,
       getStudentTotalScoreModel,
+      getStudentClassProgressModel,
       filterCategoryModel,
       filterLevelModel,
       addCourseModel,
