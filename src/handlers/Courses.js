@@ -180,6 +180,7 @@ const addNewCourse = async (req, res) => {
     try {
         const {files} = req
         if (files) {
+            console.log(files)
             const newPathFile = files[0].filename;
             console.log(newPathFile)
             req.body.image = newPathFile;
