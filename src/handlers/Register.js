@@ -22,6 +22,7 @@ const registerStudent = async (req, res) => {
         await registerUser(username, email, password);
         return sendResponse(res, true, 201, "Account created!");
     } catch (error) {
+        console.log(error)
         return sendError(res, error);
     }
 };

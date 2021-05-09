@@ -30,7 +30,7 @@ const Login = (userNameOrEmail, password) => {
         jwt.sign(payload, process.env.SECRET_KEY, options, (err, token) => {
           console.log(payload.id_user, payload.role_id, payload.username)
           if (err) return reject({ msg: err, status: 500 });
-          resolve(token);
+          resolve(token, payload.id_user, payload.role_id, payload.username);
         });
       });
       
