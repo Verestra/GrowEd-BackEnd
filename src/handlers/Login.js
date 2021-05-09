@@ -16,7 +16,7 @@ const userLogin = (req, res) => {
         return sendResponse(res, false, 400, "Data is not registered");
       } else {
         
-        return sendResponse(res, true, 200, "Login Succes",  {token : result})
+        return sendResponse(res, true, 200, "Login Succes",  {result : result})
       }
     })
     .catch((err) => {
