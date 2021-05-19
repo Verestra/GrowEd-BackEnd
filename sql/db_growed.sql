@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 11, 2021 at 11:48 AM
+-- Generation Time: Apr 24, 2021 at 12:47 AM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 8.0.2
 
@@ -29,6 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `courses` (
   `id_courses` int(11) NOT NULL,
+  `id_fasilitator` int(11) DEFAULT NULL,
   `class_name` varchar(256) NOT NULL,
   `category_id` int(11) NOT NULL,
   `description` varchar(256) NOT NULL,
@@ -36,31 +37,39 @@ CREATE TABLE `courses` (
   `class_price` int(11) NOT NULL,
   `schedule` date NOT NULL,
   `start_time` time NOT NULL,
-  `finish_time` time NOT NULL
+  `finish_time` time NOT NULL,
+  `image` varchar(256) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `courses`
 --
 
-INSERT INTO `courses` (`id_courses`, `class_name`, `category_id`, `description`, `level_id`, `class_price`, `schedule`, `start_time`, `finish_time`) VALUES
-(1, 'Know More Javascript', 1, 'Javascript from the basic for beginner. JavaScript is a programming language that adds interactivity to your website. This happens in games, in the behavior of responses when buttons are pressed or with data entry on forms; with dynamic styling; with anima', 1, 0, '2020-11-06', '08:00:00', '09:40:00'),
-(2, 'HTML and CSS to Code', 1, 'Start combining HTML and CSS to...', 2, 10, '2020-11-06', '08:00:00', '09:40:00'),
-(3, 'Indonesian war history', 2, 'From the first colonialization until..', 3, 50, '2020-11-06', '08:00:00', '09:40:00'),
-(4, 'Buddhism and Modern Psychology', 3, 'Buddhism and science are deeply..', 1, 0, '2020-11-06', '08:00:00', '09:40:00'),
-(5, 'Financial markets', 4, 'An overview of the ideas, methods...', 2, 10, '2020-11-06', '08:00:00', '09:40:00'),
-(6, 'Corporate finance', 4, 'Introduction to the fundamentals..', 3, 50, '2020-11-06', '08:00:00', '09:40:00'),
-(7, 'Algorithm specialization', 5, 'Learn to think like a computer...', 3, 50, '2020-11-06', '08:00:00', '09:40:00'),
-(8, 'Front-end fundamentals', 1, 'Learn the fundamentals of front end...', 1, 0, '2020-11-06', '08:00:00', '09:40:00'),
-(9, 'Lunar Eclipse', 6, 'This class is talking about how the lunar eclipse can happen to earth', 2, 10, '2020-11-06', '08:00:00', '09:40:00'),
-(10, 'Swift Introduction', 1, 'In this class you will be learning all the basic things about swift', 1, 0, '2020-11-06', '08:00:00', '09:40:00'),
-(59, 'asd', 1, 'asd', 3, 50, '2020-11-06', '08:00:00', '09:40:00'),
-(60, 'Learn Advance Laravel', 1, 'Get the best Laravel Course', 3, 50, '2020-11-06', '08:00:00', '09:40:00'),
-(61, 'Learn Advance CodeIgniter', 1, 'Get the best CodeIgniter Course', 3, 50, '2020-11-06', '08:00:00', '09:40:00'),
-(62, 'Learn Game Development', 1, 'Learn the best game development', 2, 10, '2020-11-06', '08:00:00', '09:40:00'),
-(63, 'Animal Psychology', 1, 'Does Animal have their own Psychology?', 1, 0, '2020-11-06', '08:00:00', '09:40:00'),
-(64, 'Learn C++', 1, 'Learn C++', 2, 10, '2020-11-06', '08:00:00', '09:40:00'),
-(65, 'Introduction to Finance, Accounting, Modeling and Valuation', 4, 'This course will help you understand accounting, finance, financial modeling and valuation from scratch (no prior accounting, finance, modeling or valuation experience is required).', 2, 10, '2020-11-06', '08:00:00', '09:40:00');
+INSERT INTO `courses` (`id_courses`, `id_fasilitator`, `class_name`, `category_id`, `description`, `level_id`, `class_price`, `schedule`, `start_time`, `finish_time`, `image`) VALUES
+(1, NULL, 'Know More Javascript', 1, 'Javascript from the basic for beginner. JavaScript is a programming language that adds interactivity to your website. This happens in games, in the behavior of responses when buttons are pressed or with data entry on forms; with dynamic styling; with anima', 1, 0, '2020-11-06', '08:00:00', '09:40:00', NULL),
+(2, NULL, 'HTML and CSS to Code', 1, 'Start combining HTML and CSS to...', 2, 10, '2020-11-06', '08:00:00', '09:40:00', NULL),
+(3, NULL, 'Indonesian war history', 2, 'From the first colonialization until..', 3, 50, '2020-11-06', '08:00:00', '09:40:00', NULL),
+(4, NULL, 'Buddhism and Modern Psychology', 3, 'Buddhism and science are deeply..', 1, 0, '2020-11-06', '08:00:00', '09:40:00', NULL),
+(5, NULL, 'Financial markets', 4, 'An overview of the ideas, methods...', 2, 10, '2020-11-06', '08:00:00', '09:40:00', NULL),
+(6, NULL, 'Corporate finance', 4, 'Introduction to the fundamentals..', 3, 50, '2020-11-06', '08:00:00', '09:40:00', NULL),
+(7, NULL, 'Algorithm specialization', 5, 'Learn to think like a computer...', 3, 50, '2020-11-06', '08:00:00', '09:40:00', NULL),
+(8, NULL, 'Front-end fundamentals', 1, 'Learn the fundamentals of front end...', 1, 0, '2020-11-06', '08:00:00', '09:40:00', NULL),
+(9, NULL, 'Lunar Eclipse', 6, 'This class is talking about how the lunar eclipse can happen to earth', 2, 10, '2020-11-06', '08:00:00', '09:40:00', NULL),
+(10, NULL, 'Swift Introduction', 1, 'In this class you will be learning all the basic things about swift', 1, 0, '2020-11-06', '08:00:00', '09:40:00', NULL),
+(59, NULL, 'asd', 1, 'asd', 3, 50, '2020-11-06', '08:00:00', '09:40:00', NULL),
+(60, NULL, 'Learn Advance Laravel', 1, 'Get the best Laravel Course', 3, 50, '2020-11-06', '08:00:00', '09:40:00', NULL),
+(61, NULL, 'Learn Advance CodeIgniter', 1, 'Get the best CodeIgniter Course', 3, 50, '2020-11-06', '08:00:00', '09:40:00', NULL),
+(62, NULL, 'Learn Game Development', 1, 'Learn the best game development', 2, 10, '2020-11-06', '08:00:00', '09:40:00', NULL),
+(63, NULL, 'Animal Psychology', 1, 'Does Animal have their own Psychology?', 1, 0, '2020-11-06', '08:00:00', '09:40:00', NULL),
+(64, NULL, 'Learn C++', 1, 'Learn C++', 2, 10, '2020-11-06', '08:00:00', '09:40:00', NULL),
+(65, NULL, 'Introduction to Finance, Accounting, Modeling and Valuation', 4, 'This course will help you understand accounting, finance, financial modeling and valuation from scratch (no prior accounting, finance, modeling or valuation experience is required).', 2, 10, '2020-11-06', '08:00:00', '09:40:00', NULL),
+(67, NULL, 'Learn Intermediate Java', 1, 'Get the best Java Course', 2, 10, '2020-11-06', '08:00:00', '09:40:00', 'asdadsad'),
+(68, NULL, 'Learn Javacript Advance', 1, 'Javascript Advance', 3, 50, '2020-11-06', '08:00:00', '09:40:00', '1618275813676-image.png'),
+(69, NULL, 'Learn C++', 1, 'C++ Intermediate', 2, 10, '2020-11-06', '08:00:00', '09:40:00', '1618286237158-image.png'),
+(70, 36, 'Learn C#', 1, 'C# Intermediate', 2, 10, '2020-11-06', '08:00:00', '09:40:00', '1618636727730-image.png'),
+(71, 36, 'Learn C', 1, 'C Intermediate', 2, 10, '2020-11-06', '08:00:00', '09:40:00', '1618636883788-image.png'),
+(72, 36, 'Learn PHP', 1, 'PHP Intermediate', 2, 10, '2020-11-06', '08:00:00', '09:40:00', '1618637024690-image.png'),
+(73, 36, 'Learn PHP Basic', 1, 'PHP Basic', 1, 0, '2020-11-06', '08:00:00', '09:40:00', '1618637122288-image.png');
 
 -- --------------------------------------------------------
 
@@ -112,7 +121,6 @@ INSERT INTO `courses_level` (`level_id`, `level_name`) VALUES
 --
 
 CREATE TABLE `courses_student` (
-  `id` int(11) NOT NULL,
   `student` int(11) NOT NULL,
   `course` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -121,14 +129,22 @@ CREATE TABLE `courses_student` (
 -- Dumping data for table `courses_student`
 --
 
-INSERT INTO `courses_student` (`id`, `student`, `course`) VALUES
-(1, 1, 1),
-(2, 27, 7),
-(3, 1, 8),
-(4, 3, 6),
-(5, 3, 3),
-(6, 35, 8),
-(7, 35, 8);
+INSERT INTO `courses_student` (`student`, `course`) VALUES
+(1, 1),
+(1, 8),
+(38, 9),
+(38, 64),
+(1, 65),
+(1, 6),
+(1, 70),
+(40, 61),
+(40, 9),
+(40, 65),
+(40, 6),
+(43, 60),
+(43, 61),
+(43, 1),
+(43, 8);
 
 -- --------------------------------------------------------
 
@@ -156,7 +172,8 @@ INSERT INTO `courses_sub` (`id`, `courses_id`, `name`) VALUES
 (7, 8, 'Sass Essential Training'),
 (8, 8, 'Learning React.js'),
 (9, 8, 'UX for Web Design'),
-(10, 8, 'Final-term Exam');
+(10, 8, 'Final-term Exam'),
+(11, 3, 'Indonesia from 18 century');
 
 -- --------------------------------------------------------
 
@@ -165,28 +182,26 @@ INSERT INTO `courses_sub` (`id`, `courses_id`, `name`) VALUES
 --
 
 CREATE TABLE `student_progress` (
-  `id` int(11) NOT NULL,
-  `course_student_id` int(11) NOT NULL,
-  `course_sub_id` int(11) NOT NULL,
-  `score` int(11) NOT NULL
+  `student_id` int(11) NOT NULL,
+  `courses_sub_id` int(11) NOT NULL,
+  `score` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `student_progress`
 --
 
-INSERT INTO `student_progress` (`id`, `course_student_id`, `course_sub_id`, `score`) VALUES
-(1, 1, 1, 100),
-(2, 1, 2, 42),
-(3, 1, 3, 21),
-(4, 1, 4, 98),
-(5, 1, 5, 86),
-(6, 1, 6, 72),
-(7, 1, 7, 90),
-(8, 1, 8, 0),
-(9, 1, 9, 0),
-(10, 1, 10, 0),
-(15, 6, 8, 80);
+INSERT INTO `student_progress` (`student_id`, `courses_sub_id`, `score`) VALUES
+(1, 1, NULL),
+(1, 2, 100),
+(1, 3, 70),
+(1, 4, 80),
+(1, 5, 80),
+(38, 8, 70),
+(1, 6, 84),
+(1, 7, 89),
+(43, 1, 80),
+(43, 2, 70);
 
 -- --------------------------------------------------------
 
@@ -207,19 +222,16 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id_user`, `username`, `email`, `password`, `role_id`) VALUES
-(1, 'Emir Kharisma', 'emirkharisma@gmail.com', 'emir123', 1),
+(1, 'Emir Kharisma', 'emirkharisma@gmail.com', '$2b$10$mRtSIh4UIRdWAo9aq2fHYO6DI4q0m5nTJu36AvC7M2lSgi/qb.DrW', 1),
 (2, 'Dimas Kurniawan', 'dimas@gmail.com', '$2b$10$mRtSIh4UIRdWAo9aq2fHYO6DI4q0m5nTJu36AvC7M2lSgi/qb.DrW', 2),
-(3, 'dimas', 'dimas12@gmail.com', '124', 1),
-(27, 'Revo', 'revo@gmail.com', 'kopi12', 1),
-(30, 'taufik', 'taufik@gmail.com', '123', 1),
-(31, 'akmal1', 'akmal@gmail.com', 'akmal', 1),
-(32, 'kurniawan', 'kurniawan@gmail.com', '123', 1),
-(33, 'nisa sabyan', 'nisa@gmail.com', '123', 1),
-(34, 'rio dewanto', 'rio@gmail.com', '123', 1),
-(35, 'bambang', 'bambang@gmail.com', '123', 1),
-(36, 'admin', 'admin@gmail.com', 'admin', 2),
-(37, 'diwan', 'diwan@gmail.com', '$2b$10$GVawQWo3dM7ThkYur9XkrOdYXpFHic9LjRpItJ64ai8GuLYHjvuca', 1),
-(38, 'user', 'user@gmail.com', '$2b$10$mRtSIh4UIRdWAo9aq2fHYO6DI4q0m5nTJu36AvC7M2lSgi/qb.DrW', 1);
+(36, 'admin', 'admin@gmail.com', '$2b$10$mRtSIh4UIRdWAo9aq2fHYO6DI4q0m5nTJu36AvC7M2lSgi/qb.DrW', 2),
+(37, 'diwan', 'diwan@gmail.com', '$2b$10$2BjF4sIPw8XR24D0BAArmOGOQy4gglpCN7EXIvg01GPDv3rLqkP.u', 1),
+(38, 'user', 'user@gmail.com', '$2b$10$mRtSIh4UIRdWAo9aq2fHYO6DI4q0m5nTJu36AvC7M2lSgi/qb.DrW', 1),
+(39, 'user12', 'user12@gmail.com', '$2b$10$YV/sgfBPqvRx1n3kTIuOWux.Y4MQfQO0RNY2PFxKTONkqvdP7zpM.', 1),
+(40, 'taufik', 'taufik@gmail.com', '$2b$10$mwRfIcr4ujlE3v7.P0VJge6B2yVZuDIQnElu7vg24ZcqJ0YpAX/Fu', 1),
+(41, 'hidayat', 'hidayat@gmail.com', '$2b$10$dV2lBDcFW4D4PgUFP.ns6OzHKMTCSSHnGc2BAlOeMDyHZ2JTcAlKu', 1),
+(42, 'ilham', 'ilham@gmail.com', '$2b$10$jg0M7rkvZu37i7oUNm76WOSE8Swy9sv35j8Hi/nURmAYnI3OhpJ.S', 1),
+(43, 'kurniawan', 'kurniawan@gmail.com', '$2b$10$1vt.y5Wg6XeG7MVxkm1PVeMLE8i6pzz7Kn8hljfXGWQKi4OXm82FC', 1);
 
 -- --------------------------------------------------------
 
@@ -250,7 +262,8 @@ INSERT INTO `users_role` (`role_id`, `role_name`) VALUES
 ALTER TABLE `courses`
   ADD PRIMARY KEY (`id_courses`),
   ADD KEY `level_id` (`level_id`),
-  ADD KEY `category_id` (`category_id`);
+  ADD KEY `category_id` (`category_id`),
+  ADD KEY `courses_owner` (`id_fasilitator`);
 
 --
 -- Indexes for table `courses_category`
@@ -268,7 +281,6 @@ ALTER TABLE `courses_level`
 -- Indexes for table `courses_student`
 --
 ALTER TABLE `courses_student`
-  ADD PRIMARY KEY (`id`),
   ADD KEY `student` (`student`),
   ADD KEY `course` (`course`);
 
@@ -283,9 +295,8 @@ ALTER TABLE `courses_sub`
 -- Indexes for table `student_progress`
 --
 ALTER TABLE `student_progress`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `course_student_id` (`course_student_id`),
-  ADD KEY `course_sub_id` (`course_sub_id`);
+  ADD KEY `student_id` (`student_id`),
+  ADD KEY `courses_sub_id` (`courses_sub_id`);
 
 --
 -- Indexes for table `users`
@@ -308,31 +319,19 @@ ALTER TABLE `users_role`
 -- AUTO_INCREMENT for table `courses`
 --
 ALTER TABLE `courses`
-  MODIFY `id_courses` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
-
---
--- AUTO_INCREMENT for table `courses_student`
---
-ALTER TABLE `courses_student`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_courses` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
 -- AUTO_INCREMENT for table `courses_sub`
 --
 ALTER TABLE `courses_sub`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT for table `student_progress`
---
-ALTER TABLE `student_progress`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- Constraints for dumped tables
@@ -343,7 +342,8 @@ ALTER TABLE `users`
 --
 ALTER TABLE `courses`
   ADD CONSTRAINT `courses_ibfk_1` FOREIGN KEY (`level_id`) REFERENCES `courses_level` (`level_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `courses_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `courses_category` (`category_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `courses_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `courses_category` (`category_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `courses_owner` FOREIGN KEY (`id_fasilitator`) REFERENCES `users` (`id_user`);
 
 --
 -- Constraints for table `courses_student`
@@ -362,8 +362,8 @@ ALTER TABLE `courses_sub`
 -- Constraints for table `student_progress`
 --
 ALTER TABLE `student_progress`
-  ADD CONSTRAINT `course_student_id` FOREIGN KEY (`course_student_id`) REFERENCES `courses_student` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `course_sub_id` FOREIGN KEY (`course_sub_id`) REFERENCES `courses_sub` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `courses_sub_id` FOREIGN KEY (`courses_sub_id`) REFERENCES `courses_sub` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `student_id` FOREIGN KEY (`student_id`) REFERENCES `courses_student` (`student`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `users`
