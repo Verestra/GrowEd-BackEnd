@@ -21,7 +21,8 @@ app.use(urlEncodedParser);
 const cors = require('cors');
 
 app.use(cors());
-app.use(express.static("public"));
+let publicDir = require('path').join(__dirname,'/public'); 
+app.use(express.static(publicDir)); 
 
 app.use(Router);
 

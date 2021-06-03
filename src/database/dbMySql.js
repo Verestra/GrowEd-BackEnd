@@ -1,5 +1,5 @@
 // init mysql
-const mysql = require('mysql');
+const mysql = require('mysql2');
 // const = process.env
 const config = {
     host: process.env.DB_HOST,

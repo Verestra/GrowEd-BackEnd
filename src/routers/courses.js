@@ -6,13 +6,15 @@ const {
     getAllCoursesPagination, 
     getMyClassPagination,
     getMyClassFasilitatorPagination, 
-    getStudentTotalScore, 
+    getStudentTotalScore,
+    getStudentTotalScoreLimit3, 
     getStudentClassProgress,
     filterCategory, 
     filterLevel, 
     addNewCourse,
     addRegisterToCourse,
     addStudentScore } = require("../handlers/Courses");
+const { getStudentTotalScoreModelLimit3 } = require("../models/Courses");
 
 // Get All Courses Pagination
 Router.get("/api/all", getAllCoursesPagination)
@@ -25,6 +27,9 @@ Router.get("/api/myClassFasilitator/", authorize.fasilitatorOnly, getMyClassFasi
 
 // Get Total Student Score
 Router.get("/api/studentScore/", authorize.studentOnly, getStudentTotalScore)
+
+// Get Total Student Score Limit 3
+Router.get("/api/scoremyclass/", authorize.studentOnly, getStudentTotalScoreLimit3)
 
 // Get Student Class Progress
 Router.get("/api/studentprogress/", authorize.studentOnly, getStudentClassProgress)

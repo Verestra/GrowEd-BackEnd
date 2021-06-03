@@ -2,6 +2,7 @@ const {getAllCoursesPaginationModel,
     getMyClassModel,
     getMyClassFasilitatorModel,
     getStudentTotalScoreModel,
+    getStudentTotalScoreModelLimit3,
     getStudentClassProgressModel,
     filterCategoryModel,
     filterLevelModel,
@@ -145,6 +146,15 @@ const getStudentTotalScore = async (req, res) => {
         return sendError(res, err);
     }
 };
+const getStudentTotalScoreLimit3 = async (req, res) => {
+    try {
+        const {id_user} = req.res.locals.userdata;
+        const totalScore = await getStudentTotalScoreModelLimit3(id_user);
+        return sendResponse(res, true, 200, "Total score", totalScore);
+    } catch (err) {
+        return sendError(res, err);
+    }
+};
 
 const getStudentClassProgress = async (req, res) => {
     try {
@@ -215,7 +225,7 @@ const addRegisterToCourse = async (req, res) => {
     try {
         let { studentId, courseId } = req.body
         let registerToCourse = await addRegisterToCourseModel(studentId, courseId)
-        return sendResponse(res, true, 200, ("Success Student Register" + registerToCourse))
+        return sendResponse(res, true, 200, registerToCourse, (`Succes Register To Class ${res} ${registerToCourse}`))
     } catch (err) {
         return sendError(res, err)
     }
@@ -238,6 +248,7 @@ module.exports = {
     // getMyClass,
     // getMyClassFasilitator,
     getStudentTotalScore,
+    getStudentTotalScoreLimit3,
     getStudentClassProgress,
     filterCategory,
     filterLevel,

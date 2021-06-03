@@ -4,7 +4,7 @@ const mysql = require("mysql");
 const getAllCoursesPaginationModel = (query) => {
   return new Promise((resolve, reject) => {
     const qs =
-      'SELECT c.id_courses, c.class_name, ct.category_name, c.description, cl.level_name, c.class_price, c.schedule,  c.finish_time, c.image FROM courses c JOIN courses_category ct ON c.category_id = ct.category_id JOIN courses_level cl ON c.level_id = cl.level_id';
+      'SELECT c.id_courses, c.class_name, ct.category_name, c.description, cl.level_name, c.class_price, c.schedule, c.start_time,  c.finish_time, c.image FROM courses c JOIN courses_category ct ON c.category_id = ct.category_id JOIN courses_level cl ON c.level_id = cl.level_id';
     const searchValue =  "WHERE class_name LIKE ?"
     let sortBy = "ORDER BY ?"
     const paginate = "LIMIT ? OFFSET ?";
@@ -27,7 +27,6 @@ const getAllCoursesPaginationModel = (query) => {
           break;
       }
     }
-    console.log(sortValue)
     const searchValues = "%" + (query.search) + "%" || "%%";
     const limit = Number(query.limit) || 3;
     
@@ -89,7 +88,20 @@ let getMyClassModel = (studentId, query) => {
 let getStudentTotalScoreModel = (courseStudentId) => {
   return new Promise((resolve, reject) => {
     const qsMyClass =
-      "SELECT AVG(score) from student_progress WHERE student_id = ?";
+      "select c.class_name, c.start_time, c.finish_time, concat(cast(count(*) as char(10)),'0', if(count(*) > 1, '','')) as progress, round (avg(sp.score)) as score FROM courses c JOIN courses_sub cs ON cs.id = c.id_courses JOIN student_progress sp ON sp.courses_sub_id = cs.id  where student_id = ? AND score is not null GROUP BY c.class_name, c.start_time, c.finish_time";
+    db.query(qsMyClass, [courseStudentId], (err, result) => {
+      if (err) return reject(err);
+      if (result.length === 0) {
+        return reject(false);
+      }
+      return resolve(result);
+    });
+  });
+};
+let getStudentTotalScoreModelLimit3 = (courseStudentId) => {
+  return new Promise((resolve, reject) => {
+    const qsMyClass =
+      "select c.class_name, c.start_time, c.finish_time, concat(cast(count(*) as char(10)),'0', if(count(*) > 1, '','')) as progress, round (avg(sp.score)) as score FROM courses c JOIN courses_sub cs ON cs.id = c.id_courses JOIN student_progress sp ON sp.courses_sub_id = cs.id  where student_id = ? AND score is not null GROUP BY c.class_name, c.start_time, c.finish_time LIMIT 3 OFFSET 0";
     db.query(qsMyClass, [courseStudentId], (err, result) => {
       if (err) return reject(err);
       if (result.length === 0) {
@@ -229,6 +241,7 @@ let filterCategoryModel = (idCategory) => {
       getMyClassModel,
       getMyClassFasilitatorModel,
       getStudentTotalScoreModel,
+      getStudentTotalScoreModelLimit3,
       getStudentClassProgressModel,
       filterCategoryModel,
       filterLevelModel,
